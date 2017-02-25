@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/24 06:27:24 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/24 11:43:03 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/02/25 12:50:49 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int			check_flag_ls(char **argv, t_flag_ls *flag, t_len_ls *len)
 		argv[len->tmp_argc] = ft_strdup(".");
 		len->tmp_argc++;
 	}
+	else if (len->cont_arg < len->tmp_argc)
+		flag->multi = 1;
 	return (0);
 }
 
@@ -68,38 +70,8 @@ int			check_flag_ls(char **argv, t_flag_ls *flag, t_len_ls *len)
 
 #include <pwd.h>
 
-t_data_ls	*ft_remalloc_data(t_data_ls *data, size_t len_d, size_t len_s)
-{
-	int			x;
-	t_data_ls	*tmp_data;
-	char		*tmp_buf;
-
-	if (len_d <= len_s)
-		return (data);
-	x = 0;
-	if (!(tmp_data = ft_memalloc((sizeof(char *) * len_d))))
-		return (NULL);
-	while (x < len_s)
-	{
-		tmp_data[x].buf = ft_strdup(data[x].buf);
-		x++;
-	}
-	free(data);
-	if (!(data = ft_memalloc((sizeof(char *) * len_d))))
-		return (NULL);
-	ft_memset(data, 0, sizeof(t_data_ls) * len_d);
-	x = 0;
-	while (x < len_s)
-	{
-		data[x].buf = ft_strdup(tmp_data[x].buf);
-		x++;
-	}
-	free(tmp_data);
-	return (data);
-}
-
-t_data_ls	*read_files(char **argv, t_flag_ls *flag, t_len_ls *len,
-		t_data_ls *data)
+char		***read_files(char **argv, t_flag_ls *flag, t_len_ls *len,
+		char ***data)
 {
 	DIR				*dir;
 	char			*str_errno;
@@ -107,7 +79,8 @@ t_data_ls	*read_files(char **argv, t_flag_ls *flag, t_len_ls *len,
 	char			*tmp;
 	struct dirent	*result;
 	struct passwd	*p;
-	struct stat		buf;
+	//	struct stat		buf;
+
 
 	if ((dir = opendir(argv[len->cont_arg])) == NULL)
 	{
@@ -116,13 +89,15 @@ t_data_ls	*read_files(char **argv, t_flag_ls *flag, t_len_ls *len,
 		{
 			tmp = ft_strjoin("ls: ", argv[len->cont_arg]);
 			tmp = ft_strjoin(tmp, ": ");
-			data[len->nbr_files].buf = ft_strjoin(tmp, str_errno);
-			len->nbr_files++;
+			data[len->nbr_dir][len->nbr_files[len->nbr_dir]] =
+				ft_strjoin(tmp, str_errno);
+			len->nbr_files[len->nbr_dir]++;
 		}
 		else
 		{
-			data[len->nbr_files].buf = ft_strdup(argv[len->cont_arg]);
-			len->nbr_files++;
+			data[len->nbr_dir][len->nbr_files[len->nbr_dir]] =
+				ft_strdup(argv[len->cont_arg]);
+			len->nbr_files[len->nbr_dir]++;
 		}
 		return (data);
 	}
@@ -130,20 +105,25 @@ t_data_ls	*read_files(char **argv, t_flag_ls *flag, t_len_ls *len,
 	{
 		if ((flag->a_min == 1) && (result->d_name[0] == '.'))
 		{
-			data[len->nbr_files].buf = ft_strdup(result->d_name);
-			len->nbr_files++;
-			data = ft_remalloc_data(data, len->nbr_files + 1, len->nbr_files);
+			data = ft_remalloc_data(data, len, len->nbr_files[len->nbr_dir]
+					+ 1);
+			data[len->nbr_dir][len->nbr_files[len->nbr_dir]] =
+				ft_strdup(result->d_name);
+			len->nbr_files[len->nbr_dir]++;
 		}
 		else if ((result->d_name[0] != '.'))
 		{
-			data[len->nbr_files].buf = ft_strdup(result->d_name);
-			len->nbr_files++;
-			data = ft_remalloc_data(data, len->nbr_files + 1, len->nbr_files);
+			data = ft_remalloc_data(data, len, len->nbr_files[len->nbr_dir]
+					+ 1);
+			data[len->nbr_dir][len->nbr_files[len->nbr_dir]] =
+				ft_strdup(result->d_name);
+			len->nbr_files[len->nbr_dir]++;
 		}
-	//	stat(result->d_name, &buf);
-	//	p = getpwuid(buf.st_uid);
-	//	ft_printf("%s\n", p->pw_name);
+		//	stat(result->d_name, &buf);
+		//	p = getpwuid(buf.st_uid);
+		//	ft_printf("%s\n", p->pw_name);
 	}
+	closedir(dir);
 	return (data);
 }
 
@@ -152,32 +132,63 @@ int			main(int argc, char **argv)
 	size_t		cont_arg;
 	t_flag_ls	flag;
 	t_len_ls	len;
-	t_data_ls	*data;
-	char		**tmp;
-	int			x;
+	char	***data;
+	char		*tmp;
 
-	x = 0;
 	len.cont_arg = 1;
-	len.nbr_files = 0;
+	len.nbr_dir = 0;
 	len.tmp_argc = argc;
-	if (!(data = ft_memalloc((sizeof(char *) * 1))))
+	if (!(len.nbr_files = ft_memalloc((sizeof(int) * len.nbr_dir + 1))))
+		return (-1);
+	ft_memset(len.nbr_files, 0, sizeof(int) * len.nbr_dir + 1);
+	if (!(data = ft_memalloc((sizeof(char **) * len.nbr_dir + 1))))
+		return (-1);
+	if (!(data[0] = ft_memalloc((sizeof(char *) * len.nbr_files[len.nbr_dir]
+						+ 1))))
 		return (-1);
 	ft_memset(&flag, 0, sizeof(t_flag_ls));
 	check_flag_ls(argv, &flag, &len);
-	data = read_files(argv, &flag, &len, data);
-	/*
-	ft_printf("cont_arg = %d ", len.cont_arg);
-	ft_printf("argv[cont_arg] = %s\n", argv[len.cont_arg]);
-	ft_printf("r_maj = %d ", flag.r_maj);
-	ft_printf("a_min = %d ", flag.a_min);
-	ft_printf("l_min = %d\n", flag.l_min);
-	ft_printf("r_min = %d ", flag.r_min);
-	ft_printf("t_min = %d\n", flag.t_min);
-	*/
-	while (x < len.nbr_files)
+	while (len.cont_arg < len.tmp_argc)
 	{
-			printf("%s\n", data[x].buf);
-			x++;
+		len.nbr_files[len.nbr_dir] = 0;
+		if (flag.multi == 1)
+		{
+			ft_printf("%d %d\n", len.nbr_dir, len.nbr_files[len.nbr_dir]);
+			tmp = ft_strjoin(argv[len.cont_arg], ":");
+			data[len.nbr_dir][len.nbr_files[len.nbr_dir]] = ft_strdup(tmp);
+			len.nbr_files[len.nbr_dir]++;
+		}
+		data = read_files(argv, &flag, &len, data);
+		len.cont_arg++;
+		if (flag.multi == 1 && !(len.cont_arg >= len.tmp_argc))
+		{
+			data[len.nbr_dir][len.nbr_files[len.nbr_dir]] = ft_strdup("");
+			len.nbr_files[len.nbr_dir]++;
+		}
+		len.nbr_dir++;
+	}
+	/*
+	   ft_printf("cont_arg = %d ", len.cont_arg);
+	   ft_printf("argv[cont_arg] = %s\n", argv[len.cont_arg]);
+	   ft_printf("r_maj = %d ", flag.r_maj);
+	   ft_printf("a_min = %d ", flag.a_min);
+	   ft_printf("l_min = %d\n", flag.l_min);
+	   ft_printf("r_min = %d ", flag.r_min);
+	   ft_printf("t_min = %d\n", flag.t_min);
+	   */
+	int			x;
+	int			y;
+
+	x = 0;
+	while (x < len.nbr_dir)
+	{
+		y = 0;
+		while (y < len.nbr_files[len.nbr_dir])
+		{
+			printf("%s\n", data[x][y]);
+			y++;
+		}
+		x++;
 	}
 	return (0);
 }

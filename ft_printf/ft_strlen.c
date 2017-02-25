@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/21 15:37:16 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/21 15:37:18 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/02/24 14:31:22 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(char *str)
 	unsigned int	i;
 
 	i = 0;
+	if (str == NULL)
+		return (0);
 	while (str[i] != '\0')
 		i++;
 	return (i);
