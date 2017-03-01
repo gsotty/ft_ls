@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/25 11:16:42 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/28 10:58:11 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/02/28 17:28:50 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,18 @@
 
 char	**read_files(char *str, t_struc_ls *struc, char **data)
 {
-	struct group	*g;
-	struct passwd	*p;
-	struct stat		buf;
-	struct dirent	*result;
-	char			*tm;
 	DIR				*dir;
 	char			*tmp;
 	char			*str_errno;
-	int				errno;
-	char			*tmp_char;
-
 	size_t			x;
 
 	x = 0;
 	if ((dir = opendir(str)) == NULL)
 	{
 		str_errno = strerror(errno);
-		struc->arg_np.err = 1;
 		if (ft_strcmp(str_errno, "Not a directory") != 0)
 		{
+			struc->arg_np.err = 1;
 			struc->arg_np.data_size = ft_remalloc_size(struc->arg_np.data_size,
 					x + 1, x);
 			data = ft_remalloc_data(data, x + 1, x);
@@ -42,120 +34,14 @@ char	**read_files(char *str, t_struc_ls *struc, char **data)
 			tmp = ft_strjoin(tmp, ": ");
 			data[x] = ft_strjoin(tmp, str_errno);
 			struc->arg_np.data_size[x] = ft_strlen(data[x]) + 1;
+			struc->arg_np.data_nbr = x;
 			x++;
 		}
 		else
-		{
-			struc->arg_np.data_size = ft_remalloc_size(struc->arg_np.data_size,
-					x + 1, x);
-			data = ft_remalloc_data(data, x + 1, x);
-			data[x] = ft_strdup(str);
-			struc->arg_np.data_size[x] = ft_strlen(data[x]) + 1;
-			x++;
-		}
-		struc->arg_np.data_nbr = x;
+			data = readdir_ls_f(struc, data, str);
 		return (data);
 	}
-	int		fd;
-	char	*tmp_stat;
-	while ((result = readdir(dir)) != NULL)
-	{
-		if (struc->arg_p.l_min == 1)
-		{
-			tmp_stat = ft_strjoin(str, "/");
-			tmp_stat = ft_strjoin(tmp_stat, result->d_name);
-			if (stat(tmp_stat, &buf) == -1)
-			{
-				str_errno = strerror(errno);
-				ft_printf("%d\n", errno);
-				ft_printf("%s\n", result->d_name);
-				ft_printf("%s\n", str_errno);
-				return (0);
-			}
-			p = getpwuid(buf.st_uid);
-			g = getgrgid(buf.st_gid);
-			tm = ctime(&buf.st_mtime);
-			tm[16] = '\0';
-			if (struc->arg_np.per == NULL)
-				struc->arg_np.per = ft_memalloc(sizeof(char) * x);
-			else
-				struc->arg_np.per = ft_remalloc_data(struc->arg_np.per,
-						x + 1, x);
-			if (struc->arg_np.nlink == NULL)
-				struc->arg_np.nlink = ft_memalloc(sizeof(char) * x);
-			else
-				struc->arg_np.nlink = ft_remalloc_data(struc->arg_np.nlink,
-						x + 1, x);
-			if (struc->arg_np.pw_name == NULL)
-				struc->arg_np.pw_name = ft_memalloc(sizeof(char) * x);
-			else
-				struc->arg_np.pw_name = ft_remalloc_data(struc->arg_np.pw_name,
-						x + 1, x);
-			if (struc->arg_np.gr_name == NULL)
-				struc->arg_np.gr_name = ft_memalloc(sizeof(char) * x);
-			else
-				struc->arg_np.gr_name = ft_remalloc_data(struc->arg_np.gr_name,
-						x + 1, x);
-			if (struc->arg_np.size == NULL)
-				struc->arg_np.size = ft_memalloc(sizeof(char) * x);
-			else
-				struc->arg_np.size = ft_remalloc_data(struc->arg_np.size,
-						x + 1, x);
-			if (struc->arg_np.mtime == NULL)
-				struc->arg_np.mtime = ft_memalloc(sizeof(char) * x);
-			else
-				struc->arg_np.mtime = ft_remalloc_data(struc->arg_np.mtime,
-						x + 1, x);
-			struc->arg_np.per[x] = permision_l(&buf, result);
-			if (struc->arg_np.len_m_nl < ft_strlen(ft_itoa(buf.st_nlink)))
-				struc->arg_np.len_m_nl = ft_strlen(ft_itoa(buf.st_nlink));
-			struc->arg_np.nlink[x] = ft_itoa(buf.st_nlink);
-			if (struc->arg_np.len_m_si < ft_strlen(ft_itoa(buf.st_size)))
-				struc->arg_np.len_m_si = ft_strlen(ft_itoa(buf.st_size));
-			struc->arg_np.size[x] = ft_itoa(buf.st_size);
-			struc->arg_np.gr_name[x] = ft_strdup(g->gr_name);
-			struc->arg_np.mtime[x] = ft_strdup(tm + 4);
-			struc->arg_np.pw_name[x] = ft_strdup(p->pw_name);
-			struc->arg_np.per[x] = ft_strdup(struc->arg_np.per[x]);
-		}
-		if ((struc->arg_p.a_min == 1) && (result->d_name[0] == '.'))
-		{
-			if (S_ISDIR(buf.st_mode) == 1)
-			{
-				struc->arg_np.directory = ft_remalloc_size(
-						struc->arg_np.directory, struc->arg_np.nbr_dir + 1,
-						struc->arg_np.nbr_dir);
-				struc->arg_np.directory[struc->arg_np.nbr_dir] = x;
-				struc->arg_np.nbr_dir++;
-			}
-			struc->arg_np.data_size = ft_remalloc_size(struc->arg_np.data_size,
-					x + 1, x);
-			data = ft_remalloc_data(data, x + 1, x);
-			data[x] = ft_strdup(result->d_name);
-			struc->arg_np.data_size[x] = result->d_namlen;
-			data[x][result->d_namlen] = '\0';
-			x++;
-		}
-		else if ((result->d_name[0] != '.'))
-		{
-			if (S_ISDIR(buf.st_mode) == 1)
-			{
-				struc->arg_np.directory = ft_remalloc_size(
-						struc->arg_np.directory, struc->arg_np.nbr_dir + 1,
-						struc->arg_np.nbr_dir);
-				struc->arg_np.directory[struc->arg_np.nbr_dir] = x;
-				struc->arg_np.nbr_dir++;
-			}
-			struc->arg_np.data_size = ft_remalloc_size(struc->arg_np.data_size,
-					x + 1, x);
-			data = ft_remalloc_data(data, x + 1, x);
-			data[x] = ft_strdup(result->d_name);
-			struc->arg_np.data_size[x] = result->d_namlen;
-			data[x][result->d_namlen] = '\0';
-			x++;
-		}
-	}
-	struc->arg_np.data_nbr = x;
+	data = readdir_ls(dir, struc, data, str);
 	closedir(dir);
 	return (data);
 }

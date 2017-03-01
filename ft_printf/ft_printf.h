@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 10:40:26 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/24 08:41:41 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/02/28 10:40:57 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ typedef struct		s_flag
 typedef struct		s_width
 {
 	int				number;
+	unsigned int	etoile : 1;
 }					t_width;
 
 typedef struct		s_precision
 {
 	int				number;
+	unsigned int	etoile : 1;
 }					t_precision;
 
 typedef struct		s_lenght
@@ -73,6 +75,7 @@ typedef struct		s_specifier
 
 typedef struct		s_struc
 {
+	char			*str;
 	t_flag			flag;
 	t_width			width;
 	t_precision		precision;
@@ -114,8 +117,8 @@ char				*ft_intmax_t_itoa_base(intmax_t n, int base);
 char				*ft_intmax_t_itoa_base_m(intmax_t n, int base);
 char				*ft_uintmax_t_itoa_base_m(uintmax_t n, int base);
 int					check_specifier(t_struc *struc, const char *str, int z);
-int					check_flag(t_struc *struc, const char *str, int z, int y);
-int					check_width(t_struc *struc, const char *str, int z, int y);
+int					check_flag(t_struc *struc, int z, int y);
+int					check_width(t_struc *struc, int z, int y, va_list ap);
 size_t				ft_wcsnlen(const wchar_t *wcs, size_t n);
 size_t				ft_wcslen(const wchar_t *wcs);
 int					ft_wctomb(char *s, wchar_t wc);
@@ -126,10 +129,8 @@ char				*modif_longeur_x(t_struc *struc, va_list ap);
 char				*modif_longeur_xm(t_struc *struc, va_list ap);
 char				*modif_longeur_d_and_i(t_struc *struc, va_list ap);
 char				*modif_longeur_dm(t_struc *struc, va_list ap, intmax_t tmp);
-int					check_precision(t_struc *struc, const char *str,
-		int z, int y);
-int					check_lenght(t_struc *struc, const char *str,
-		int z, int y);
+int					check_precision(t_struc *struc, int z, int y, va_list ap);
+int					check_lenght(t_struc *struc, int z, int y);
 char				*write_d_and_i(t_struc *struc, char *buf, t_len *len,
 		va_list ap);
 char				*write_pourcent(t_struc *struc, char *buf, t_len *len);

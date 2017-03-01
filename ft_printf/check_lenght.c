@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/21 15:28:18 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/21 15:28:20 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/02/28 10:39:46 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,26 @@ static int	check_lenght_1(t_struc *struc, const char *str, int y)
 	return (0);
 }
 
-int			check_lenght(t_struc *struc, const char *str, int z, int y)
+int			check_lenght(t_struc *struc, int z, int y)
 {
 	while (y < z)
 	{
-		if (str[y] == 'h' && str[y + 1] == 'h')
+		if (struc->str[y] == 'h' && struc->str[y + 1] == 'h')
 		{
 			struc->lenght.hh = 1;
 			return (1);
 		}
-		if (str[y] == 'h')
+		if (struc->str[y] == 'h')
 		{
 			struc->lenght.h = 1;
 			return (1);
 		}
-		if (str[y] == 'l' && str[y + 1] == 'l')
+		if (struc->str[y] == 'l' && struc->str[y + 1] == 'l')
 		{
 			struc->lenght.ll = 1;
 			return (1);
 		}
-		if ((check_lenght_1(struc, str, y)) != 0)
+		if ((check_lenght_1(struc, struc->str, y)) != 0)
 			return (1);
 		y++;
 	}

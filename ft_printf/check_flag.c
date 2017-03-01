@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/21 15:27:54 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/21 15:28:05 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/02/28 10:37:52 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ static int	check_flag_1(t_struc *struc, const char *str, int y)
 	return (1);
 }
 
-int			check_flag(t_struc *struc, const char *str, int z, int y)
+int			check_flag(t_struc *struc, int z, int y)
 {
-	while (y < z && ft_isnum_o(str[y]) == 0)
+	while (y < z && ft_isnum_o(struc->str[y]) == 0)
 	{
-		if (str[y] == '-')
+		if (struc->str[y] == '-')
 			struc->flag.tiret = 1;
-		if (str[y] == '+')
+		if (struc->str[y] == '+')
 			struc->flag.plus = 1;
-		if (str[y] == ' ')
+		if (struc->str[y] == ' ')
 			struc->flag.espace = 1;
-		check_flag_1(struc, str, y);
+		check_flag_1(struc, struc->str, y);
 		y++;
 	}
 	return (0);
