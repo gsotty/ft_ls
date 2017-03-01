@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/25 11:16:42 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/01 15:28:32 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/01 17:18:59 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ char	**read_files(char *str, t_struc_ls *struc, char **data)
 			p = getpwuid(buf.st_uid);
 			g = getgrgid(buf.st_gid);
 			tm = ctime(&buf.st_mtime);
+			ft_printf("%s\n", tm);
+			ft_printf("%s\n", result->d_name);
 			tm[16] = '\0';
 			if (struc->arg_np.per == NULL)
 				struc->arg_np.per = ft_memalloc(sizeof(char) * x);
@@ -106,6 +108,11 @@ char	**read_files(char *str, t_struc_ls *struc, char **data)
 			else
 				struc->arg_np.mtime = ft_remalloc_data(struc->arg_np.mtime,
 						x + 1, x);
+			if (struc->arg_np.time == NULL)
+				struc->arg_np.time = ft_memalloc(sizeof(size_t) * x);
+			else
+				struc->arg_np.time = ft_remalloc_size(struc->arg_np.time,
+						x + 1, x);
 			struc->arg_np.per[x] = permision_l(&buf);
 			if (struc->arg_np.len_m_nl < ft_strlen(ft_itoa(buf.st_nlink)))
 				struc->arg_np.len_m_nl = ft_strlen(ft_itoa(buf.st_nlink));
@@ -121,6 +128,7 @@ char	**read_files(char *str, t_struc_ls *struc, char **data)
 			if (struc->arg_np.len_m_np < ft_strlen(p->pw_name))
 				struc->arg_np.len_m_np = ft_strlen(p->pw_name);
 			struc->arg_np.per[x] = ft_strdup(struc->arg_np.per[x]);
+			struc->arg_np.time[x] = buf.st_mtime;
 		}
 		if ((struc->arg_p.a_min == 1) && (result->d_name[0] == '.'))
 		{
@@ -166,6 +174,8 @@ char	**read_files(char *str, t_struc_ls *struc, char **data)
 
 int			main(int argc, char **argv)
 {
+	struct stat		buf;
+	char			*str_errno;
 	char			**data;
 	t_list_ls		*tmp_data;
 	t_list_ls		*list;
@@ -187,6 +197,15 @@ int			main(int argc, char **argv)
 				struc.arg_np.data_nbr, &struc);
 		tmp_data->dossier = ft_strdup(argv[struc.arg_p.cont_arg]);
 		tmp_data->directory = ft_memalloc(struc.arg_np.nbr_dir + 1);
+		if (stat(argv[struc.arg_p.cont_arg], &buf) == -1)
+		{
+			str_errno = strerror(errno);
+			ft_printf("%d\n", errno);
+			ft_printf("%s\n", argv[struc.arg_p.cont_arg]);
+			ft_printf("%s\n", str_errno);
+			return (0);
+		}
+		tmp_data->time_dir = buf.st_mtime;
 		while (tmp_data->nbr_dir < struc.arg_np.nbr_dir)
 		{
 			tmp_data->directory = ft_remalloc_size(tmp_data->directory,
@@ -195,8 +214,7 @@ int			main(int argc, char **argv)
 				struc.arg_np.directory[tmp_data->nbr_dir];
 			tmp_data->nbr_dir++;
 		}
-		tmp_data->data = order_no_flag(tmp_data->data_nbr, tmp_data->data,
-				tmp_data->data_size, &struc);
+		tmp_data = order_no_flag(tmp_data, &struc);
 		if (begin_list == NULL)
 		{
 			list = tmp_data;

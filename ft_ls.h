@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/24 06:27:27 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/01 15:28:29 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/01 17:18:49 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ typedef struct			s_arg_p
 	unsigned int		multi : 1;
 	size_t				cont_arg;
 	int					tmp_argc;
+	size_t				nbr_dir;
 }						t_arg_p;
 
 typedef struct			s_arg_np
 {
+	size_t				*time;
 	char				**per;
 	char				**nlink;
 	char				**pw_name;
@@ -66,6 +68,8 @@ typedef struct			s_struc_ls
 
 typedef struct			s_list_ls
 {
+	size_t				*time;
+	size_t				time_dir;
 	char				**per;
 	char				**nlink;
 	char				**pw_name;
@@ -93,8 +97,7 @@ int						check_flag_ls(char **argv, t_struc_ls *struc);
 int						write_list(t_list_ls *begin_list, t_struc_ls *struc);
 char					*ft_remalloc(char *dest, int len_d, int len_s);
 t_list_ls				*order_list(t_list_ls *begin_list, t_struc_ls *struc);
-char					**order_no_flag(size_t data_nbr, char **data,
-		size_t *data_size, t_struc_ls *struc);
+t_list_ls				*order_no_flag(t_list_ls *begin, t_struc_ls *struc);
 char					**readdir_ls_f(t_struc_ls *struc, char **data,
 		char *str);
 char					**readdir_ls(DIR *dir, t_struc_ls *struc, char **data,

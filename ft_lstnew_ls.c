@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/27 09:19:20 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/28 16:52:09 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/01 16:54:51 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,15 @@ static t_list_ls	*struc_to_lst(t_list_ls *new, t_struc_ls *struc, int x)
 		new->size = ft_memalloc(sizeof(char *) * struc->arg_np.data_nbr + 1);
 	if (new->mtime == NULL)
 		new->mtime = ft_memalloc(sizeof(char *) * struc->arg_np.data_nbr + 1);
+	if (new->time == NULL)
+		new->time = ft_memalloc(sizeof(size_t) * struc->arg_np.data_nbr + 1);
 	new->per[x] = ft_strdup(struc->arg_np.per[x]);
 	new->nlink[x] = ft_strdup(struc->arg_np.nlink[x]);
 	new->pw_name[x] = ft_strdup(struc->arg_np.pw_name[x]);
 	new->gr_name[x] = ft_strdup(struc->arg_np.gr_name[x]);
 	new->size[x] = ft_strdup(struc->arg_np.size[x]);
 	new->mtime[x] = ft_strdup(struc->arg_np.mtime[x]);
+	new->time[x] = struc->arg_np.time[x];
 	if (new->len_m_nl == 0)
 		new->len_m_nl = struc->arg_np.len_m_nl;
 	if (new->len_m_si == 0)
