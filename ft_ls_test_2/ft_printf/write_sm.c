@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 15:38:22 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/09 14:00:24 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/02/21 17:08:32 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@ static char	*ft_largeur(t_struc *struc, char *tmp, t_len *len, int tmp_int)
 
 	if (!(tmp_spaces = ft_memalloc(sizeof(char) * struc->width.number)))
 		return (0);
-	if (struc->flag.zero && (struc->flag.tiret == 0) &&
-			struc->precision.number <= 0)
+	if ((struc->flag.zero == 1) && (struc->flag.tiret == 0) &&
+			(struc->precision.number <= 0))
 		ft_memset(tmp_spaces, 48, tmp_int);
 	else
 		ft_memset(tmp_spaces, 32, tmp_int);
 	if (struc->flag.tiret)
 	{
 		tmp = ft_remalloc(tmp, struc->width.number, len->len_tmp);
-		ft_memmove(tmp + len->len_tmp, tmp_spaces, tmp_int);
+		ft_memcpy(tmp + len->len_tmp, tmp_spaces, tmp_int);
 	}
 	else
 	{
 		tmp_spaces = ft_remalloc(tmp_spaces, struc->width.number, tmp_int);
-		ft_memmove(tmp_spaces + tmp_int, tmp, len->len_tmp);
+		ft_memcpy(tmp_spaces + tmp_int, tmp, len->len_tmp);
 		free(tmp);
 		tmp = ft_memalloc(struc->width.number);
 		ft_memcpy(tmp, tmp_spaces, struc->width.number);
@@ -63,42 +63,36 @@ static char	*ft_if_no_precision(t_struc *struc, char *tmp, t_len *len)
 	return (tmp);
 }
 
-static char	*conv_char(va_list ap, t_len *len)
+static char	*conv_char(t_struc *struc, va_list ap, t_len *len)
 {
+	size_t	x;
 	char	*tmp;
-	char	*tmp_va;
-	int		len_tmp_va;
+	wchar_t	*tmp_va;
 
-	len_tmp_va = 0;
-	tmp_va = va_arg(ap, char *);
+	tmp_va = va_arg(ap, int *);
 	if (tmp_va == NULL)
 	{
 		tmp = ft_memalloc(7);
 		ft_memcpy(tmp, "(null)", 7);
 		len->len_tmp = 6;
 	}
-	else
+	if (tmp_va != NULL)
 	{
-		len_tmp_va = ft_strlen(tmp_va);
-		tmp = ft_memalloc(len_tmp_va);
-		ft_memcpy(tmp, tmp_va, len_tmp_va);
-		tmp[len_tmp_va] = '\0';
-		len->len_tmp = len_tmp_va;
+		if (struc->precision.number == -1)
+			x = ft_wcslen(tmp_va);
+		else
+			x = ft_wcsnlen(tmp_va, struc->precision.number);
+		tmp = ft_memalloc(x);
+		len->len_tmp = ft_wcstombs(tmp, tmp_va, x);
 	}
 	return (tmp);
 }
 
-char		*write_s(t_struc *struc, char *buf, t_len *len, va_list ap)
+char		*write_sm(t_struc *struc, char *buf, t_len *len, va_list ap)
 {
 	char	*tmp;
 
-	tmp = NULL;
-	if (struc->lenght.l == 1)
-	{
-		buf = write_sm(struc, buf, len, ap);
-		return (buf);
-	}
-	tmp = conv_char(ap, len);
+	tmp = conv_char(struc, ap, len);
 	if (tmp[0] == '\0')
 		struc->precision.number = -1;
 	if (struc->precision.number != -1)

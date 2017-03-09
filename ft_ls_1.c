@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/25 11:16:42 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/01 17:18:59 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/02 09:42:22 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ char	**read_files(char *str, t_struc_ls *struc, char **data)
 			p = getpwuid(buf.st_uid);
 			g = getgrgid(buf.st_gid);
 			tm = ctime(&buf.st_mtime);
-			ft_printf("%s\n", tm);
-			ft_printf("%s\n", result->d_name);
 			tm[16] = '\0';
 			if (struc->arg_np.per == NULL)
 				struc->arg_np.per = ft_memalloc(sizeof(char) * x);
