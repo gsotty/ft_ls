@@ -6,11 +6,11 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/26 14:18:34 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/28 12:13:11 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/11 15:45:54 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "ft_ls_2.h"
 
 static char	*permision_l_3(struct stat *buf, char *tmp)
 {
