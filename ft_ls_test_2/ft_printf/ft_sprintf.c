@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/22 09:39:00 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/09 14:22:59 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/13 12:16:05 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static char	*verif_line(t_len *len, const char *str, char *buf, va_list ap)
 	t_struc	struc;
 
 	y = 0;
-	buf = NULL;
 	while (str[len->pos_str] != '\0')
 	{
 		if (str[len->pos_str] == '%' && (y = len->pos_str + 1))
@@ -58,7 +57,6 @@ int			ft_sprintf(char *buf_1, const char *str, ...)
 	va_list	ap;
 	char	*buf;
 
-	buf = buf_1;
 	ft_memset(&len, 0, sizeof(t_len));
 	len.len_str = ft_strlen((char *)str);
 	va_start(ap, str);
@@ -67,10 +65,10 @@ int			ft_sprintf(char *buf_1, const char *str, ...)
 	ft_memset(buf, 0, len.len_str);
 	if ((buf = verif_line(&len, str, buf, ap)) == NULL)
 		return (0);
+	ft_memcpy(buf_1, buf, len.pos_buf);
 	va_end(ap);
-	buf_1 = ft_memcpy(buf_1, buf, len.pos_buf);
-	free(buf);
 	if (len.null == 1)
 		len.pos_buf = -1;
+	free(buf);
 	return (len.pos_buf);
 }

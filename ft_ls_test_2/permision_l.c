@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/26 14:18:34 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/11 15:45:54 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/13 11:01:26 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char		*permision_l(struct stat *buf)
 {
 	char	*tmp;
 
-	tmp = ft_memalloc(sizeof(char) * 11);
+	tmp = ft_memalloc(sizeof(char) * 12);
 	if (S_ISREG(buf->st_mode) == 1)
 		tmp[0] = '-';
 	else if (S_ISDIR(buf->st_mode) == 1)
