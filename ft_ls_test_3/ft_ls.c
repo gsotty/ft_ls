@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls_3.c                                          :+:      :+:    :+:   */
+/*   ft_ls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/13 11:42:15 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/14 11:19:28 by gsotty           ###   ########.fr       */
+/*   Created: 2017/03/14 11:28:31 by gsotty            #+#    #+#             */
+/*   Updated: 2017/03/14 11:28:48 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls_2.h"
+#include "ft_ls.h"
 
 size_t	ft_len_dir(char *str, t_struc_ls *struc)
 {
@@ -351,7 +351,7 @@ void	write_buf_ls(char **save_name, int test, t_struc_ls *struc,
 		if (struc->flag.l_min == 1)
 			ft_printf("total %lld\n", total / 512);
 		if (struc->flag.l_min == 1)
-			verif_len_2(struc->buf.stat[y], struc, struc->buf.cont_files[y]);
+			verif_len(struc->buf.stat[y], struc, struc->buf.cont_files[y]);
 		while (x < struc->buf.cont_files[y])
 		{
 			if (struc->flag.l_min == 1)
