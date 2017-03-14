@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:27:57 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/14 11:28:14 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/14 17:24:48 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,25 @@ typedef struct		s_struc_ls
 	t_buf_ls		buf;
 }					t_struc_ls;
 
+void				printf_l_nlik(t_struc_ls *struc, int x, int y);
+void				printf_l_lik(t_struc_ls *struc, int x, int y,
+		char **save_name);
+void				printf_l_nlik_tsix(t_struc_ls *struc, int x, int y);
+void				printf_l_lik_tsix(t_struc_ls *struc, int x, int y,
+		char **save_name);
+void				write_buf_ls(char **save_name, int test, t_struc_ls *struc,
+		long long total);
+void				order_t_r(char **save_name, t_struc_ls *struc);
+void				order_t_no_r(char **save_name, t_struc_ls *struc);
+void				order_no_t_r(char **save_name, t_struc_ls *struc);
+void				order_no_t_no_r(char **save_name, t_struc_ls *struc);
+void				order_r(char **save_name, t_struc_ls *struc);
+void				order_no_r(char **save_name, t_struc_ls *struc);
+void				ft_while_ls(char *str, int test, t_struc_ls *struc);
+void				write_struc_ls(size_t cont_files, char *str, char *name,
+		t_struc_ls *struc);
+void				files_is_dir(char *str, t_struc_ls *struc);
+size_t				ft_len_dir(char *str, t_struc_ls *struc);
 void				ft_ls(int argc, char **argv, int test, t_struc_ls *struc);
 int					check_flag_ls(int argc, char **argv, t_struc_ls *struc);
 void				verif_len(STAT *buf, t_struc_ls *struc, int nbr_files);

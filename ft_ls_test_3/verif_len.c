@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/06 14:05:53 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/14 11:29:16 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/14 12:22:12 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ void	verif_len(STAT *buf, t_struc_ls *struc, int nbr_files)
 	size_t			cont;
 	struct group	*g;
 	struct passwd	*p;
-	int				len_nlink;
-	int				len_size;
+	size_t			len_nlink;
+	size_t			len_size;
 
 	cont = 0;
-	while (cont < nbr_files)
+	while (cont < (size_t)nbr_files)
 	{
 		p = getpwuid(buf[cont].st_uid);
 		g = getgrgid(buf[cont].st_gid);
