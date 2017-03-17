@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:27:57 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/14 17:24:48 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/17 11:59:50 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct		s_len_ls
 
 typedef struct		s_flag_ls
 {
+	unsigned int	one : 1;
+	unsigned int	tiret : 1;
 	unsigned int	r_maj : 1;
 	unsigned int	a_min : 1;
 	unsigned int	l_min : 1;
@@ -58,8 +60,10 @@ typedef struct		s_flag_ls
 typedef struct		s_buf_ls
 {
 	int				argc;
+	size_t			*files_or_dir;
 	int				*cont_files;
 	char			**save_name;
+	size_t			**xattr;
 	char			***buf;
 	STAT			**stat;
 }					t_buf_ls;
@@ -89,11 +93,12 @@ void				ft_while_ls(char *str, int test, t_struc_ls *struc);
 void				write_struc_ls(size_t cont_files, char *str, char *name,
 		t_struc_ls *struc);
 void				files_is_dir(char *str, t_struc_ls *struc);
-size_t				ft_len_dir(char *str, t_struc_ls *struc);
+size_t				ft_len_dir(char *str, int test, t_struc_ls *struc);
 void				ft_ls(int argc, char **argv, int test, t_struc_ls *struc);
 int					check_flag_ls(int argc, char **argv, t_struc_ls *struc);
 void				verif_len(STAT *buf, t_struc_ls *struc, int nbr_files);
-char				*permision_l(struct stat *buf);
+char				*permision_l(struct stat *buf, int y, int x,
+		t_struc_ls *struc);
 void				recursive_r_maj_files_ls(char *save_name, char *buf,
 		t_struc_ls *struc);
 

@@ -6,14 +6,15 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:47:47 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/14 11:49:14 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/16 16:20:29 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-size_t		ft_len_dir(char *str, t_struc_ls *struc)
+size_t		ft_len_dir(char *str, int test, t_struc_ls *struc)
 {
+	char			*test_1;
 	DIR				*dir;
 	size_t			x;
 	struct dirent	*result;
@@ -21,9 +22,13 @@ size_t		ft_len_dir(char *str, t_struc_ls *struc)
 	x = 0;
 	if ((dir = opendir(str)) == NULL)
 	{
-		ft_printf("%s:\nls: ", str);
-		perror(ft_strrchr(str, '/') + 1);
-		write(1, "\n", 1);
+		if (test == 0 || struc->flag.multi == 1)
+			ft_printf("%s:\n", str);
+		ft_printf("ls: ");
+		if ((test_1 = ft_strrchr(str, '/')) == NULL)
+			perror(str);
+		else
+			perror(ft_strrchr(str, '/') + 1);
 		return (-1);
 	}
 	while ((result = readdir(dir)) != NULL)

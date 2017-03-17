@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/14 11:28:31 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/14 14:23:31 by gsotty           ###   ########.fr       */
+/*   Created: 2017/03/16 10:06:35 by gsotty            #+#    #+#             */
+/*   Updated: 2017/03/17 15:16:31 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ void	ft_ls(int argc, char **argv, int test, t_struc_ls *struc)
 		return ;
 	if ((struc->buf.stat = ft_memalloc(sizeof(STAT *) * argc)) == NULL)
 		return ;
+	if ((struc->buf.xattr = ft_memalloc(sizeof(size_t *) * argc)) == NULL)
+		return ;
+	if ((struc->buf.files_or_dir = ft_memalloc(sizeof(size_t) * argc)) == NULL)
+		return ;
 	while (cont_arg_1 < argc)
 	{
 		ft_while_ls(argv[struc->len.cont_arg_2], test, struc);
@@ -41,5 +45,5 @@ int		main(int argc, char **argv)
 	ft_memset(&struc, 0, sizeof(t_struc_ls));
 	cont_arg = check_flag_ls(argc, argv, &struc);
 	ft_ls(struc.buf.argc - cont_arg, argv + cont_arg, 1, &struc);
-	return (0);
+	return (1);
 }

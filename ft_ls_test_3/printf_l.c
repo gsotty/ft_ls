@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 17:21:17 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/14 17:26:50 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/17 15:45:58 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			printf_l_nlik(t_struc_ls *struc, int x, int y)
 	p = getpwuid(struc->buf.stat[y][x].st_uid);
 	g = getgrgid(struc->buf.stat[y][x].st_gid);
 	ft_printf("%s %*zd %-*s  %-*s  %*lld %.12s %s\n",
-			tmp_perm = permision_l(&struc->buf.stat[y][x]),
+			tmp_perm = permision_l(&struc->buf.stat[y][x], y, x, struc),
 			(int)struc->len.nlink,
 			struc->buf.stat[y][x].st_nlink,
 			(int)struc->len.pwname,
@@ -44,7 +44,7 @@ static void		printf_l_lik_2(t_struc_ls *struc, int x, int y, char *test_1)
 	p = getpwuid(struc->buf.stat[y][x].st_uid);
 	g = getgrgid(struc->buf.stat[y][x].st_gid);
 	ft_printf("%s %*d %-*s  %-*s  %*lld %.12s %s -> %s\n",
-			tmp_perm = permision_l(&struc->buf.stat[y][x]),
+			tmp_perm = permision_l(&struc->buf.stat[y][x], y, x, struc),
 			struc->len.nlink,
 			struc->buf.stat[y][x].st_nlink,
 			struc->len.pwname,
@@ -62,28 +62,19 @@ void			printf_l_lik(t_struc_ls *struc, int x, int y,
 		char **save_name)
 {
 	char		*tmp;
-	struct stat	stat_nlink;
 	char		*test_1;
 
 	tmp = ft_memalloc(32767);
-	sprintf(tmp, "%s/%s", save_name[y],
+	ft_sprintf(tmp, "%s/%s", save_name[y],
 			struc->buf.buf[y][x]);
-	if (stat(tmp, &stat_nlink))
+	test_1 = ft_memalloc(256);
+	if ((readlink(tmp, test_1, 256)) == -1)
 	{
-		ft_printf("ls :");
+		ft_printf("ls: ");
 		perror(tmp);
 	}
 	else
-	{
-		test_1 = ft_memalloc(256);
-		if ((readlink(tmp, test_1, 256)) == -1)
-		{
-			ft_printf("ls: ");
-			perror(tmp);
-		}
-		else
-			printf_l_lik_2(struc, x, y, test_1);
-		free(test_1);
-	}
+		printf_l_lik_2(struc, x, y, test_1);
+	free(test_1);
 	free(tmp);
 }
