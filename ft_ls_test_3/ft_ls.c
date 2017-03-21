@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 10:06:35 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/17 15:16:31 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/21 14:08:49 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_ls(int argc, char **argv, int test, t_struc_ls *struc)
 		return ;
 	while (cont_arg_1 < argc)
 	{
-		ft_while_ls(argv[struc->len.cont_arg_2], test, struc);
+		ft_while_ls(argv[cont_arg_1], test, struc);
 		cont_arg_1++;
 	}
 	write_buf_ls(struc->buf.save_name, test, struc, struc->len.total);

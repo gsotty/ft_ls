@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 14:18:39 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/17 15:14:56 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/21 16:47:58 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ static void		ft_while_2(char **save_name, int x, int y, t_struc_ls *struc)
 	else
 	{
 		if (S_ISLNK(struc->buf.stat[y][x].st_mode) == 1)
-		{
 			printf_l_lik(struc, x, y, save_name);
-		}
 		else
 			printf_l_nlik(struc, x, y);
 	}
@@ -46,7 +44,9 @@ static void		ft_while_buf_ls(char **save_name, int y, t_struc_ls *struc,
 		if (struc->flag.l_min == 1)
 			ft_while_2(save_name, x, y, struc);
 		else
+		{
 			ft_printf("%s\n", struc->buf.buf[y][x]);
+		}
 		if (struc->flag.r_maj == 0)
 			free(struc->buf.buf[y][x]);
 		x++;

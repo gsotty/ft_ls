@@ -6,32 +6,35 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:52:05 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/17 16:08:42 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/21 11:06:39 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
 static void		ft_while_files_2(struct dirent *result, char *str,
-		t_struc_ls *struc)
+		t_struc_ls *struc, STAT stat_files)
 {
 	if (result->d_name[0] != '.' && struc->flag.a_min == 0)
 	{
 		write_struc_ls(struc->buf.cont_files[struc->len.cont_arg_2], str,
 				result->d_name, struc);
 		struc->buf.cont_files[struc->len.cont_arg_2]++;
+		struc->len.total += stat_files.st_blocks;
 	}
 	else if (result->d_name[0] == '.' && struc->flag.a_min == 1)
 	{
 		write_struc_ls(struc->buf.cont_files[struc->len.cont_arg_2], str,
 				result->d_name, struc);
 		struc->buf.cont_files[struc->len.cont_arg_2]++;
+		struc->len.total += stat_files.st_blocks;
 	}
 	else if (struc->flag.a_min == 1)
 	{
 		write_struc_ls(struc->buf.cont_files[struc->len.cont_arg_2], str,
 				result->d_name, struc);
 		struc->buf.cont_files[struc->len.cont_arg_2]++;
+		struc->len.total += stat_files.st_blocks;
 	}
 }
 
@@ -59,7 +62,6 @@ static void		ft_while_files(struct dirent *result, char *str,
 		perror(tmp);
 		return ;
 	}
-	struc->len.total += stat_files.st_blocks;
 	if ((ret = listxattr(tmp, chemin, taille, XATTR_NOFOLLOW)) > 0 &&
 			ft_strstr(str, "/usr") == NULL)
 	{
@@ -67,7 +69,7 @@ static void		ft_while_files(struct dirent *result, char *str,
 			[struc->len.cont_arg_2]] = 1;
 	}
 	struc->len.namlen = result->d_namlen;
-	ft_while_files_2(result, str, struc);
+	ft_while_files_2(result, str, struc, stat_files);
 	free(tmp);
 	free(chemin);
 }

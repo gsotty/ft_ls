@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 12:00:18 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/17 16:08:27 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/21 16:44:43 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 void	ft_while_else(char *str, t_struc_ls *struc, STAT stat)
 {
-	int		ret;
-	char	*chemin;
-	size_t	taille;
+	size_t			mask;
+	int				ret;
+	char			*chemin;
+	size_t			taille;
 
+	mask = 1;
 	taille = 32764;
 	chemin = ft_memalloc(32764);
 	struc->buf.files_or_dir[struc->len.cont_arg_2] = 1;
@@ -25,16 +27,17 @@ void	ft_while_else(char *str, t_struc_ls *struc, STAT stat)
 					sizeof(size_t) * 1)))
 		return ;
 	if (!(struc->buf.buf[struc->len.cont_arg_2] =
-				ft_memalloc(sizeof(char *) * struc->len.argv + 1)))
+				ft_memalloc(sizeof(char *) * 1)))
 		return ;
 	if (!(struc->buf.save_name[struc->len.cont_arg_2] =
-				ft_memalloc(sizeof(char) * struc->len.argv + 1)))
+				ft_memalloc(sizeof(char) * struc->len.argv)))
 		return ;
 	if (!(struc->buf.stat[struc->len.cont_arg_2] =
 				ft_memalloc(sizeof(STAT) * struc->len.argv)))
 		return ;
 	if (!(struc->buf.buf[struc->len.cont_arg_2][struc->buf.cont_files
-				[struc->len.cont_arg_2]] = ft_memalloc(sizeof(char *))))
+				[struc->len.cont_arg_2]] = ft_memalloc(sizeof(char *) *
+					struc->len.argv)))
 		return ;
 	struc->buf.stat[struc->len.cont_arg_2][struc->buf.cont_files
 		[struc->len.cont_arg_2]] = stat;
@@ -54,7 +57,8 @@ void	ft_while_else(char *str, t_struc_ls *struc, STAT stat)
 				[struc->len.cont_arg_2]] = 1;
 		}
 	}
-	struc->len.total = stat.st_size;
+	mask = (mask << 8) - 1;
+	struc->len.total = stat.st_blocks;
 	struc->buf.cont_files[struc->len.cont_arg_2]++;
 	struc->len.cont_arg_2++;
 	free(chemin);
@@ -66,10 +70,18 @@ void	ft_while_ls(char *str, int test, t_struc_ls *struc)
 
 	if (lstat(str, &stat_dir) == -1)
 	{
-		if (ft_strcmp(strerror(errno), "Not a directory") == 0)
-			return ;
-		ft_printf("ls: ");
-		perror(str);
+		if (str[0] == '\0')
+		{
+			ft_printf("ls: ");
+			perror("fts_open");
+		}
+		else
+		{
+			if (ft_strcmp(strerror(errno), "Not a directory") == 0)
+				return ;
+			ft_printf("ls: ");
+			perror(str);
+		}
 		return ;
 	}
 	struc->len.argv = ft_strlen(str);

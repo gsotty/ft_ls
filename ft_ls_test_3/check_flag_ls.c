@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/25 11:20:58 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/16 13:46:13 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/21 14:36:53 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	verif_flag_ls(char *str, t_struc_ls *struc, size_t pos_str)
 				struc->flag.t_min = 1;
 			else if (str[pos_str] == '1')
 				struc->flag.one = 1;
-			else if (str[pos_str] == '-')
+			else if (str[1] == '-' && str[2] == '\0')
 				struc->flag.tiret = 1;
 			else
 			{
@@ -48,6 +48,7 @@ static int	verif_flag_ls(char *str, t_struc_ls *struc, size_t pos_str)
 int			check_flag_ls(int argc, char **argv, t_struc_ls *struc)
 {
 	int		x;
+	int		y;
 
 	x = 1;
 	struc->buf.argc = argc;
@@ -68,5 +69,15 @@ int			check_flag_ls(int argc, char **argv, t_struc_ls *struc)
 	}
 	else if (x + 1 < struc->buf.argc)
 		struc->flag.multi = 1;
+	y = x;
+	while (y < argc)
+	{
+		if (argv[y][0] == '\0')
+		{
+			ft_printf("ls: fts_open: No such file or directory\n");
+			exit(1);
+		}
+		y++;
+	}
 	return (x);
 }

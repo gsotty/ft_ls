@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:47:47 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/16 16:20:29 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/21 13:49:12 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ size_t		ft_len_dir(char *str, int test, t_struc_ls *struc)
 		if (test == 0 || struc->flag.multi == 1)
 			ft_printf("%s:\n", str);
 		ft_printf("ls: ");
-		if ((test_1 = ft_strrchr(str, '/')) == NULL)
+		if (str == NULL)
+			perror("fts_open");
+		else if ((test_1 = ft_strrchr(str, '/')) == NULL)
 			perror(str);
 		else
 			perror(ft_strrchr(str, '/') + 1);

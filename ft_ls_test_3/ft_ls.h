@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:27:57 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/17 11:59:50 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/21 14:26:30 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include <fcntl.h>
 # include <sys/xattr.h>
 
-typedef struct		s_len_ls
+typedef struct		s_len_s
 {
 	int				cont_arg;
 	int				cont_arg_2;
