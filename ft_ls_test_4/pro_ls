@@ -1,0 +1,23 @@
+/*
+**
+** elle recuper un char * qui contien un des argv et il doit remplier la
+** struc avec se qu'il doit avoir pour l'affichage.
+**
+** deja savoir si c'est un dir ou un autre type de fichier.
+** (files_or_dir(size_t *))
+**
+** si c'est un dir il faut avoir le nombre de fichier qu'il contien
+** (cont_files(int *)), le name du dir (save_name(char **)), le name des
+** fichier (buf(char ***)), le stat des fichier (stat(struct stat **)),
+** le xattr des fichier (xattr(size_t **)).
+**
+** si c'est un autre type de fichier (qui n'est pas un link) cont_files == 1,
+** le name du dir (save_name(char **)), le name du fichier (buf(char ***)),
+** le stat du fichier (stat(struct stat **)), le xattr du fichier
+** (xattr(size_t *)).
+**
+** si c'est un lien on doit appler readlink pour avoir le nom du fichier
+** pointer et voir si c'est un fichier ou un dir pui on le renvoir aux fontion
+** pour gere les dir ou les fichier.
+**
+*/
