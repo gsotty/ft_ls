@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 17:21:17 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/21 15:07:01 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/22 16:09:23 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,17 +89,31 @@ void			printf_l_lik(t_struc_ls *struc, int x, int y,
 	char		*tmp;
 	char		*test_1;
 
-	tmp = ft_memalloc(32767);
-	ft_sprintf(tmp, "%s/%s", save_name[y],
-			struc->buf.buf[y][x]);
-	test_1 = ft_memalloc(256);
-	if ((readlink(tmp, test_1, 256)) == -1)
+	if (struc->buf.files_or_dir[y] == 1)
 	{
-		ft_printf("ls: ");
-		perror(tmp);
+		test_1 = ft_memalloc(256);
+		if ((readlink(struc->buf.buf[y][x], test_1, 256)) == -1)
+		{
+			ft_printf("ls: ");
+			perror(struc->buf.buf[y][x]);
+		}
+		else
+			printf_l_lik_2(struc, x, y, test_1);
 	}
 	else
-		printf_l_lik_2(struc, x, y, test_1);
+	{
+		tmp = ft_memalloc(32767);
+		ft_sprintf(tmp, "%s/%s", save_name[y],
+				struc->buf.buf[y][x]);
+		test_1 = ft_memalloc(256);
+		if ((readlink(tmp, test_1, 256)) == -1)
+		{
+			ft_printf("ls: ");
+			perror(tmp);
+		}
+		else
+			printf_l_lik_2(struc, x, y, test_1);
+		free(tmp);
+	}
 	free(test_1);
-	free(tmp);
 }

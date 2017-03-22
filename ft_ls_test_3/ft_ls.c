@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 10:06:35 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/21 14:08:49 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/22 14:45:11 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ void	ft_ls(int argc, char **argv, int test, t_struc_ls *struc)
 	int		cont_arg_1;
 
 	cont_arg_1 = 0;
+	if ((struc->buf.stat = ft_memalloc(sizeof(STAT *) * argc)) == NULL)
+		return ;
 	if ((struc->buf.buf = ft_memalloc(sizeof(char **) * argc)) == NULL)
 		return ;
-	if ((struc->buf.save_name = ft_memalloc(sizeof(char *) * argc)) == NULL)
+	if ((struc->buf.xattr = ft_memalloc(sizeof(size_t *) * argc)) == NULL)
 		return ;
 	if ((struc->buf.cont_files = ft_memalloc(sizeof(int) * argc)) == NULL)
 		return ;
-	if ((struc->buf.stat = ft_memalloc(sizeof(STAT *) * argc)) == NULL)
-		return ;
-	if ((struc->buf.xattr = ft_memalloc(sizeof(size_t *) * argc)) == NULL)
+	if ((struc->buf.save_name = ft_memalloc(sizeof(char *) * argc)) == NULL)
 		return ;
 	if ((struc->buf.files_or_dir = ft_memalloc(sizeof(size_t) * argc)) == NULL)
 		return ;

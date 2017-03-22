@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 17:15:26 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/21 12:23:20 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/22 16:09:43 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ void			printf_l_lik_tsix(t_struc_ls *struc, int x,
 	char			*tmp;
 	char			*test_1;
 
-	tmp = ft_memalloc(32767);
-	if (ft_strcmp(save_name[y], "/etc") == 0)
+	if (struc->buf.files_or_dir[y] == 1)
 	{
 		test_1 = ft_memalloc(256);
 		if ((readlink(save_name[y], test_1, 256)) == -1)
@@ -112,6 +111,7 @@ void			printf_l_lik_tsix(t_struc_ls *struc, int x,
 	}
 	else
 	{
+	tmp = ft_memalloc(32767);
 		ft_sprintf(tmp, "%s/%s", save_name[y],
 				struc->buf.buf[y][x]);
 		test_1 = ft_memalloc(256);
@@ -122,7 +122,7 @@ void			printf_l_lik_tsix(t_struc_ls *struc, int x,
 		}
 		else
 			printf_l_lik_tsix_2(struc, x, y, test_1);
+		free(tmp);
 	}
 	free(test_1);
-	free(tmp);
 }

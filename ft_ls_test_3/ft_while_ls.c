@@ -6,67 +6,16 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 12:00:18 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/21 16:44:43 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/22 16:10:18 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	ft_while_else(char *str, t_struc_ls *struc, STAT stat)
-{
-	size_t			mask;
-	int				ret;
-	char			*chemin;
-	size_t			taille;
-
-	mask = 1;
-	taille = 32764;
-	chemin = ft_memalloc(32764);
-	struc->buf.files_or_dir[struc->len.cont_arg_2] = 1;
-	if (!(struc->buf.xattr[struc->len.cont_arg_2] = ft_memalloc(
-					sizeof(size_t) * 1)))
-		return ;
-	if (!(struc->buf.buf[struc->len.cont_arg_2] =
-				ft_memalloc(sizeof(char *) * 1)))
-		return ;
-	if (!(struc->buf.save_name[struc->len.cont_arg_2] =
-				ft_memalloc(sizeof(char) * struc->len.argv)))
-		return ;
-	if (!(struc->buf.stat[struc->len.cont_arg_2] =
-				ft_memalloc(sizeof(STAT) * struc->len.argv)))
-		return ;
-	if (!(struc->buf.buf[struc->len.cont_arg_2][struc->buf.cont_files
-				[struc->len.cont_arg_2]] = ft_memalloc(sizeof(char *) *
-					struc->len.argv)))
-		return ;
-	struc->buf.stat[struc->len.cont_arg_2][struc->buf.cont_files
-		[struc->len.cont_arg_2]] = stat;
-	ft_memcpy(struc->buf.save_name[struc->len.cont_arg_2], str,
-			struc->len.argv);
-	struc->buf.save_name[struc->len.cont_arg_2][struc->len.argv] = '\0';
-	ft_memcpy(struc->buf.buf[struc->len.cont_arg_2][struc->buf.cont_files
-			[struc->len.cont_arg_2]], str, struc->len.argv);
-	struc->buf.buf[struc->len.cont_arg_2][struc->buf.cont_files
-		[struc->len.cont_arg_2]][struc->len.argv] = '\0';
-	if ((ret = listxattr(str, chemin, taille, XATTR_NOFOLLOW)) > 0 &&
-			ft_strstr(str, "/usr") == NULL)
-	{
-		if (ret != -1)
-		{
-			struc->buf.xattr[struc->len.cont_arg_2][struc->buf.cont_files
-				[struc->len.cont_arg_2]] = 1;
-		}
-	}
-	mask = (mask << 8) - 1;
-	struc->len.total = stat.st_blocks;
-	struc->buf.cont_files[struc->len.cont_arg_2]++;
-	struc->len.cont_arg_2++;
-	free(chemin);
-}
-
 void	ft_while_ls(char *str, int test, t_struc_ls *struc)
 {
 	struct stat	stat_dir;
+	struct stat	stat_lnk;
 
 	if (lstat(str, &stat_dir) == -1)
 	{
@@ -85,20 +34,56 @@ void	ft_while_ls(char *str, int test, t_struc_ls *struc)
 		return ;
 	}
 	struc->len.argv = ft_strlen(str);
-	if (S_ISDIR(stat_dir.st_mode) == 1)
+	if (S_ISLNK(stat_dir.st_mode) == 1)
 	{
-		if (test == 0)
-			write(1, "\n", 1);
-		if ((struc->len.dir = ft_len_dir(str, test, struc)) == (size_t)-1)
-			return ;
-		if (!(struc->buf.buf[struc->len.cont_arg_2] =
-					ft_memalloc(sizeof(char *) * struc->len.dir)))
-			return ;
-		if (!(struc->buf.stat[struc->len.cont_arg_2] =
-					ft_memalloc(sizeof(STAT) * struc->len.dir)))
-			return ;
-		files_is_dir(str, struc);
+		if (struc->flag.l_min == 1)
+		{
+			if (lstat(str, &stat_lnk) == -1)
+				ft_memset(&stat_lnk, 0, sizeof(struct stat));
+		}
+		else
+		{
+			if (stat(str, &stat_lnk) == -1)
+				ft_memset(&stat_lnk, 0, sizeof(struct stat));
+		}
+		if (S_ISDIR(stat_lnk.st_mode) == 1)
+		{
+			if (test == 0)
+				write(1, "\n", 1);
+			if ((struc->len.dir = ft_len_dir(str, test, struc)) == (size_t)-1)
+				return ;
+			if (!(struc->buf.buf[struc->len.cont_arg_2] =
+						ft_memalloc(sizeof(char *) * struc->len.dir)))
+				return ;
+			if (!(struc->buf.stat[struc->len.cont_arg_2] =
+						ft_memalloc(sizeof(STAT) * struc->len.dir)))
+				return ;
+			files_is_dir(str, struc);
+		}
+		else if (test == 1)
+		{
+			files_is_files(str, struc, stat_dir);
+		}
 	}
-	else if (test == 1)
-		ft_while_else(str, struc, stat_dir);
+	else
+	{
+		if (S_ISDIR(stat_dir.st_mode) == 1)
+		{
+			if (test == 0)
+				write(1, "\n", 1);
+			if ((struc->len.dir = ft_len_dir(str, test, struc)) == (size_t)-1)
+				return ;
+			if (!(struc->buf.buf[struc->len.cont_arg_2] =
+						ft_memalloc(sizeof(char *) * struc->len.dir)))
+				return ;
+			if (!(struc->buf.stat[struc->len.cont_arg_2] =
+						ft_memalloc(sizeof(STAT) * struc->len.dir)))
+				return ;
+			files_is_dir(str, struc);
+		}
+		else if (test == 1)
+		{
+			files_is_files(str, struc, stat_dir);
+		}
+	}
 }
