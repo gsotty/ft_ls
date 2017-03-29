@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 14:18:39 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/21 16:47:58 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 11:36:45 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,21 @@ static void		ft_while_buf_ls(char **save_name, int y, t_struc_ls *struc,
 	}
 }
 
+static void		write_files(int y, char **save_name, t_struc_ls *struc,
+		long long total)
+{
+	if (struc->flag.l_min == 1 && struc->buf.files_or_dir[y] == 0 &&
+			struc->buf.cont_files[y] != 0)
+		ft_printf("total %lld\n", (total));
+	if (struc->flag.l_min == 1)
+		verif_len(struc->buf.stat[y], struc, struc->buf.cont_files[y]);
+	ft_while_buf_ls(save_name, y, struc, 0);
+	free(struc->buf.save_name[y]);
+	free(struc->buf.stat[y]);
+	free(struc->buf.buf[y]);
+	free(struc->buf.xattr[y]);
+}
+
 void			write_buf_ls(char **save_name, int test, t_struc_ls *struc,
 		long long total)
 {
@@ -84,16 +99,7 @@ void			write_buf_ls(char **save_name, int test, t_struc_ls *struc,
 		if ((test == 0 || struc->flag.multi == 1) &&
 				struc->buf.files_or_dir[y] == 0)
 			ft_printf("%s:\n", save_name[y]);
-		if (struc->flag.l_min == 1 && struc->buf.files_or_dir[y] == 0 &&
-				struc->buf.cont_files[y] != 0)
-			ft_printf("total %lld\n", (total));
-		if (struc->flag.l_min == 1)
-			verif_len(struc->buf.stat[y], struc, struc->buf.cont_files[y]);
-		ft_while_buf_ls(save_name, y, struc, 0);
-		free(struc->buf.save_name[y]);
-		free(struc->buf.stat[y]);
-		free(struc->buf.buf[y]);
-		free(struc->buf.xattr[y]);
+		write_files(y, save_name, struc, total);
 		y++;
 	}
 	free(struc->buf.xattr);

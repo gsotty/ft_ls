@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 13:33:14 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/17 12:42:46 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 10:31:56 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,20 @@ static void	orber_dir(int x, char **save_name, t_struc_ls *struc)
 	free(tmp_name);
 }
 
+static int	verif_order(int x, char **save_name, t_struc_ls *struc)
+{
+	int		tmp;
+
+	tmp = struc->buf.files_or_dir[x];
+	struc->buf.files_or_dir[x] = struc->buf.files_or_dir[x + 1];
+	struc->buf.files_or_dir[x + 1] = tmp;
+	orber_dir(x, save_name, struc);
+	return (1);
+}
+
 void		order_no_t_no_r(char **save_name, t_struc_ls *struc)
 {
 	int				x;
-	int				tmp;
 	int				verif;
 
 	verif = 1;
@@ -99,32 +109,14 @@ void		order_no_t_no_r(char **save_name, t_struc_ls *struc)
 		{
 			if ((ft_strcmp(save_name[x], save_name[x + 1])) > 0 &&
 					struc->buf.files_or_dir[x] == 0)
-			{
-				tmp = struc->buf.files_or_dir[x];
-				struc->buf.files_or_dir[x] = struc->buf.files_or_dir[x + 1];
-				struc->buf.files_or_dir[x + 1] = tmp;
-				orber_dir(x, save_name, struc);
-				verif = 1;
-			}
+				verif = verif_order(x, save_name, struc);
 			else if ((ft_strcmp(save_name[x], save_name[x + 1])) > 0 &&
 					struc->buf.files_or_dir[x] == 1 &&
 					struc->buf.files_or_dir[x + 1] == 1)
-			{
-				tmp = struc->buf.files_or_dir[x];
-				struc->buf.files_or_dir[x] = struc->buf.files_or_dir[x + 1];
-				struc->buf.files_or_dir[x + 1] = tmp;
-				orber_dir(x, save_name, struc);
-				verif = 1;
-			}
+				verif = verif_order(x, save_name, struc);
 			else if (struc->buf.files_or_dir[x] == 0 &&
 					struc->buf.files_or_dir[x + 1] == 1)
-			{
-				tmp = struc->buf.files_or_dir[x];
-				struc->buf.files_or_dir[x] = struc->buf.files_or_dir[x + 1];
-				struc->buf.files_or_dir[x + 1] = tmp;
-				orber_dir(x, save_name, struc);
-				verif = 1;
-			}
+				verif = verif_order(x, save_name, struc);
 			x++;
 			orber_files(x, struc);
 		}

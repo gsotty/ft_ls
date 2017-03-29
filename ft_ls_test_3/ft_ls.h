@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:27:57 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/22 14:49:21 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 10:34:28 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,10 @@ void				printf_l_lik_tsix(t_struc_ls *struc, int x, int y,
 		char **save_name);
 void				write_buf_ls(char **save_name, int test, t_struc_ls *struc,
 		long long total);
+void				orber_dir_t_no_r(int x, char **save_name,
+		t_struc_ls *struc);
+void				orber_dir_t_r(int x, char **save_name,
+		t_struc_ls *struc);
 void				order_t_r(char **save_name, t_struc_ls *struc);
 void				order_t_no_r(char **save_name, t_struc_ls *struc);
 void				order_no_t_r(char **save_name, t_struc_ls *struc);
@@ -92,7 +96,7 @@ void				order_no_r(char **save_name, t_struc_ls *struc);
 void				ft_while_ls(char *str, int test, t_struc_ls *struc);
 void				write_struc_ls(size_t cont_files, char *str, char *name,
 		t_struc_ls *struc);
-void				files_is_dir(char *str, t_struc_ls *struc);
+void				files_is_dir(char *str, t_struc_ls *struc, int test);
 void				files_is_files(char *str, t_struc_ls *struc, STAT stat);
 size_t				ft_len_dir(char *str, int test, t_struc_ls *struc);
 void				ft_ls(int argc, char **argv, int test, t_struc_ls *struc);
