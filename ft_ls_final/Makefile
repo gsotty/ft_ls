@@ -6,7 +6,7 @@
 #    By: gsotty <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/03 15:44:40 by gsotty            #+#    #+#              #
-#    Updated: 2017/03/29 11:32:41 by gsotty           ###   ########.fr        #
+#    Updated: 2017/03/29 17:45:10 by gsotty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC = check_flag_ls.c files_is_dir.c ft_len_dir.c ft_ls.c ft_while_ls.c \
 	  permision_l.c printf_l_lnk.c printf_l_nlnk.c printf_l_lnk_tsix.c \
 	  printf_l_nlnk_tsix.c recursive_r_maj_files_ls.c \
 	  verif_len.c write_buf_ls.c write_struc_ls.c files_is_files.c \
-	  order_dir_t_no_r.c order_dir_t_r.c
+	  order_dir_t_no_r.c order_dir_t_r.c verif_argv_null.c
 
 OBJ = $(SRC:.c=.o)
 

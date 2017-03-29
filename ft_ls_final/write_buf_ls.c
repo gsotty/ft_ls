@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 14:18:39 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/29 11:36:45 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 17:56:00 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void		ft_while_2(char **save_name, int x, int y, t_struc_ls *struc)
 	long			time_files;
 
 	time_day = time(&time_day);
-	time_files = struc->buf.stat[y][x].st_mtime;
+	time_files = TIME;
 	if (!(time_files > time_day - 15778800 &&
 				time_files < time_day + 60))
 	{
@@ -36,19 +36,28 @@ static void		ft_while_2(char **save_name, int x, int y, t_struc_ls *struc)
 	}
 }
 
+static void		ft_while_buf_ls_2(char **save_name, int y, t_struc_ls *struc,
+		int x)
+{
+	if (struc->flag.l_min == 1)
+		ft_while_2(save_name, x, y, struc);
+	else
+	{
+		if (struc->flag.s_min == 1)
+			ft_printf("%*d ", struc->len.blocks,
+					struc->buf.stat[y][x].st_blocks);
+		ft_printf("%s\n", struc->buf.buf[y][x]);
+	}
+	if (struc->flag.r_maj == 0)
+		free(struc->buf.buf[y][x]);
+}
+
 static void		ft_while_buf_ls(char **save_name, int y, t_struc_ls *struc,
 		int x)
 {
 	while (x < struc->buf.cont_files[y])
 	{
-		if (struc->flag.l_min == 1)
-			ft_while_2(save_name, x, y, struc);
-		else
-		{
-			ft_printf("%s\n", struc->buf.buf[y][x]);
-		}
-		if (struc->flag.r_maj == 0)
-			free(struc->buf.buf[y][x]);
+		ft_while_buf_ls_2(save_name, y, struc, x);
 		x++;
 	}
 	x = 0;
@@ -69,10 +78,10 @@ static void		ft_while_buf_ls(char **save_name, int y, t_struc_ls *struc,
 static void		write_files(int y, char **save_name, t_struc_ls *struc,
 		long long total)
 {
-	if (struc->flag.l_min == 1 && struc->buf.files_or_dir[y] == 0 &&
-			struc->buf.cont_files[y] != 0)
+	if ((struc->flag.l_min == 1 || struc->flag.s_min) &&
+			struc->buf.files_or_dir[y] == 0 && struc->buf.cont_files[y] != 0)
 		ft_printf("total %lld\n", (total));
-	if (struc->flag.l_min == 1)
+	if (struc->flag.l_min == 1 || struc->flag.s_min)
 		verif_len(struc->buf.stat[y], struc, struc->buf.cont_files[y]);
 	ft_while_buf_ls(save_name, y, struc, 0);
 	free(struc->buf.save_name[y]);
@@ -87,10 +96,8 @@ void			write_buf_ls(char **save_name, int test, t_struc_ls *struc,
 	int				y;
 
 	y = 0;
-	if (struc->flag.r_min == 1)
-		order_r(save_name, struc);
-	else
-		order_no_r(save_name, struc);
+	if (struc->flag.f_min == 0)
+		order(save_name, struc);
 	while (y < struc->len.cont_arg_2)
 	{
 		if ((y < struc->len.cont_arg_2) && struc->buf.files_or_dir[y] == 0 &&

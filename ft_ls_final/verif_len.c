@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/06 14:05:53 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/29 10:53:31 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 16:47:05 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void		files_is_dev(size_t nbr_files, STAT *buf, t_struc_ls *struc)
 		if (struc->len.nlink < len_nlink)
 			struc->len.nlink = len_nlink;
 		struc->len.size = 8;
+		if (struc->len.blocks < len_nbr(buf[cont].st_blocks))
+			struc->len.blocks = len_nbr(buf[cont].st_blocks);
 		if (struc->len.grname < ft_strlen(g->gr_name))
 			struc->len.grname = ft_strlen(g->gr_name);
 		if (struc->len.pwname < ft_strlen(p->pw_name))
@@ -76,6 +78,8 @@ static void		files_no_dev(size_t nbr_files, STAT *buf, t_struc_ls *struc)
 			struc->len.grname = ft_strlen(g->gr_name);
 		if (struc->len.pwname < ft_strlen(p->pw_name))
 			struc->len.pwname = ft_strlen(p->pw_name);
+		if (struc->len.blocks < len_nbr(buf[cont].st_blocks))
+			struc->len.blocks = len_nbr(buf[cont].st_blocks);
 		cont++;
 	}
 }

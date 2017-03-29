@@ -6,15 +6,40 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 11:27:57 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/29 10:34:28 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 17:51:44 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
-# define STAT	struct stat
-# define DIRENT	struct dirent
+# define STAT		struct stat
+# define DIRENT		struct dirent
+# define ATIME		stat_tmp.st_atime
+# define MTIME		stat_tmp.st_mtime
+# define ATI_2		stat_tmp_2.st_atime
+# define MTI_2		stat_tmp_2.st_mtime
+# define SIZE		stat_tmp.st_size
+# define SIZE_2		stat_tmp_2.st_size
+# define NAME_SIZE	struc->buf.stat[x][y].st_size
+# define NAME_SI_2	struc->buf.stat[x][y + 1].st_size
+# define NAME_ATIME	struc->buf.stat[y][x].st_atime
+# define NAME_MTIME	struc->buf.stat[y][x].st_mtime
+# define NAME_ATI_2	struc->buf.stat[x][y].st_atime
+# define NAME_MTI_2	struc->buf.stat[x][y].st_mtime
+# define NAME_ATI_3	struc->buf.stat[x][y + 1].st_atime
+# define NAME_MTI_3	struc->buf.stat[x][y + 1].st_mtime
+# define TMP_TIME	(struc->flag.u_min == 1 ? ATIME : MTIME)
+# define TMP_TIME_2	(struc->flag.u_min == 1 ? ATI_2 : MTI_2)
+# define LEN_TIME	(struc->flag.u_min == 1 ? &NAME_ATIME : &NAME_MTIME)
+# define TIME		(struc->flag.u_min == 1 ? NAME_ATIME : NAME_MTIME)
+# define ORD_TIME	(struc->flag.u_min == 1 ? NAME_ATI_2 : NAME_MTI_2)
+# define ORD_TIME_2	(struc->flag.u_min == 1 ? NAME_ATI_3 : NAME_MTI_3)
+# define ORD		(struc->flag.s_maj == 1 ? SIZE : TMP_TIME)
+# define ORD_2		(struc->flag.s_maj == 1 ? SIZE_2 : TMP_TIME_2)
+# define ORD_1		(struc->flag.s_maj == 1 ? NAME_SIZE : ORD_TIME)
+# define ORD_21		(struc->flag.s_maj == 1 ? NAME_SI_2 : ORD_TIME_2)
+# define T_MAJ		(struc->flag.t_maj == 1 ? 20 : 12)
 
 # include "./libft/libft.h"
 # include "./ft_printf/ft_printf.h"
@@ -43,6 +68,7 @@ typedef struct		s_len_s
 	size_t			pwname;
 	size_t			grname;
 	size_t			size;
+	size_t			blocks;
 }					t_len_ls;
 
 typedef struct		s_flag_ls
@@ -50,10 +76,15 @@ typedef struct		s_flag_ls
 	unsigned int	one : 1;
 	unsigned int	tiret : 1;
 	unsigned int	r_maj : 1;
+	unsigned int	t_maj : 1;
+	unsigned int	s_maj : 1;
 	unsigned int	a_min : 1;
+	unsigned int	f_min : 1;
 	unsigned int	l_min : 1;
 	unsigned int	r_min : 1;
+	unsigned int	s_min : 1;
 	unsigned int	t_min : 1;
+	unsigned int	u_min : 1;
 	unsigned int	multi : 1;
 }					t_flag_ls;
 
@@ -91,8 +122,7 @@ void				order_t_r(char **save_name, t_struc_ls *struc);
 void				order_t_no_r(char **save_name, t_struc_ls *struc);
 void				order_no_t_r(char **save_name, t_struc_ls *struc);
 void				order_no_t_no_r(char **save_name, t_struc_ls *struc);
-void				order_r(char **save_name, t_struc_ls *struc);
-void				order_no_r(char **save_name, t_struc_ls *struc);
+void				order(char **save_name, t_struc_ls *struc);
 void				ft_while_ls(char *str, int test, t_struc_ls *struc);
 void				write_struc_ls(size_t cont_files, char *str, char *name,
 		t_struc_ls *struc);
@@ -106,5 +136,6 @@ char				*permision_l(struct stat *buf, int y, int x,
 		t_struc_ls *struc);
 void				recursive_r_maj_files_ls(char *save_name, char *buf,
 		t_struc_ls *struc);
+void				verif_argv_null(int argc, char **argv, int y);
 
 #endif

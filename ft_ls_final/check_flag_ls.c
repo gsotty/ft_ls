@@ -6,32 +6,54 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/25 11:20:58 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/29 10:28:19 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 17:44:41 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	char_flag_is(char *str, t_struc_ls *struc, size_t pos_str)
+static int	char_flag_is_2(char *str, t_struc_ls *struc, size_t pos_str)
 {
 	if (str[pos_str] == 'R')
 		struc->flag.r_maj = 1;
+	else if (str[pos_str] == 'T')
+		struc->flag.t_maj = 1;
+	else if (str[pos_str] == 'S')
+		struc->flag.s_maj = 1;
 	else if (str[pos_str] == 'a')
 		struc->flag.a_min = 1;
+	else if (str[pos_str] == 'f')
+	{
+		struc->flag.f_min = 1;
+		struc->flag.a_min = 1;
+	}
 	else if (str[pos_str] == 'l')
 		struc->flag.l_min = 1;
+	else if (str[pos_str] == 'u')
+		struc->flag.u_min = 1;
 	else if (str[pos_str] == 'r')
 		struc->flag.r_min = 1;
-	else if (str[pos_str] == 't')
+	else if (str[pos_str] == 's')
+		struc->flag.s_min = 1;
+	else
+		return (0);
+	return (1);
+}
+
+static void	char_flag_is(char *str, t_struc_ls *struc, size_t pos_str)
+{
+	if (str[pos_str] == 't')
 		struc->flag.t_min = 1;
 	else if (str[pos_str] == '1')
 		struc->flag.one = 1;
 	else if (str[1] == '-' && str[2] == '\0')
 		struc->flag.tiret = 1;
+	else if ((char_flag_is_2(str, struc, pos_str)) == 1)
+		return ;
 	else
 	{
 		ft_printf("ls: illegal option -- %c\n", str[pos_str]);
-		ft_printf("usage: ./ft_ls [-Ralrt1] [file ...]\n");
+		ft_printf("usage: ./ft_ls [-RTSaflurt1] [file ...]\n");
 		exit(1);
 	}
 }
@@ -62,22 +84,6 @@ static int	filling_struc(char **argv, t_struc_ls *struc)
 		x++;
 	}
 	return (x);
-}
-
-static void	verif_argv_null(int argc, char **argv, int y)
-{
-	int x;
-
-	x = y;
-	while (x < argc)
-	{
-		if (argv[x][0] == '\0')
-		{
-			ft_printf("ls: fts_open: No such file or directory\n");
-			exit(1);
-		}
-		x++;
-	}
 }
 
 int			check_flag_ls(int argc, char **argv, t_struc_ls *struc)

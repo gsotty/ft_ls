@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 11:20:11 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/29 11:20:22 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 16:48:47 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ static void		printf_is_dev(t_struc_ls *struc, int x, int y)
 	mask = (mask << 8) - 1;
 	p = getpwuid(struc->buf.stat[y][x].st_uid);
 	g = getgrgid(struc->buf.stat[y][x].st_gid);
-	ft_printf("%s %*zd %-*s  %-*s %4d,%4d %.12s %s\n",
+	if (struc->flag.s_min == 1)
+		ft_printf("%*d ", struc->len.blocks, struc->buf.stat[y][x].st_blocks);
+	ft_printf("%s %*zd %-*s  %-*s %4d,%4d %.*s %s\n",
 			tmp_perm = permision_l(&struc->buf.stat[y][x], y, x, struc),
 			(int)struc->len.nlink,
 			struc->buf.stat[y][x].st_nlink,
@@ -33,7 +35,8 @@ static void		printf_is_dev(t_struc_ls *struc, int x, int y)
 			g->gr_name,
 			struc->buf.stat[y][x].st_rdev >> 24,
 			struc->buf.stat[y][x].st_rdev & mask,
-			ctime(&struc->buf.stat[y][x].st_mtime) + 4,
+			T_MAJ,
+			ctime(LEN_TIME) + 4,
 			struc->buf.buf[y][x]);
 	free(tmp_perm);
 }
@@ -49,7 +52,9 @@ static void		printf_no_dev(t_struc_ls *struc, int x, int y)
 	mask = (mask << 8) - 1;
 	p = getpwuid(struc->buf.stat[y][x].st_uid);
 	g = getgrgid(struc->buf.stat[y][x].st_gid);
-	ft_printf("%s %*zd %-*s  %-*s  %*lld %.12s %s\n",
+	if (struc->flag.s_min == 1)
+		ft_printf("%*d ", struc->len.blocks, struc->buf.stat[y][x].st_blocks);
+	ft_printf("%s %*zd %-*s  %-*s  %*lld %.*s %s\n",
 			tmp_perm = permision_l(&struc->buf.stat[y][x], y, x, struc),
 			(int)struc->len.nlink,
 			struc->buf.stat[y][x].st_nlink,
@@ -59,7 +64,8 @@ static void		printf_no_dev(t_struc_ls *struc, int x, int y)
 			g->gr_name,
 			(int)struc->len.size,
 			struc->buf.stat[y][x].st_size,
-			ctime(&struc->buf.stat[y][x].st_mtime) + 4,
+			T_MAJ,
+			ctime(LEN_TIME) + 4,
 			struc->buf.buf[y][x]);
 	free(tmp_perm);
 }

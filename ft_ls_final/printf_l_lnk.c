@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/29 11:19:50 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/29 11:39:46 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 16:47:39 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ static void		printf_l_lik_2(t_struc_ls *struc, int x, int y, char *test_1)
 
 	p = getpwuid(struc->buf.stat[y][x].st_uid);
 	g = getgrgid(struc->buf.stat[y][x].st_gid);
-	ft_printf("%s %*d %-*s  %-*s  %*lld %.12s %s -> %s\n",
+	if (struc->flag.s_min == 1)
+		ft_printf("%*d ", struc->len.blocks, struc->buf.stat[y][x].st_blocks);
+	ft_printf("%s %*d %-*s  %-*s  %*lld %.*s %s -> %s\n",
 			tmp_perm = permision_l(&struc->buf.stat[y][x], y, x, struc),
 			struc->len.nlink,
 			struc->buf.stat[y][x].st_nlink,
@@ -30,7 +32,8 @@ static void		printf_l_lik_2(t_struc_ls *struc, int x, int y, char *test_1)
 			g->gr_name,
 			struc->len.size,
 			struc->buf.stat[y][x].st_size,
-			ctime(&struc->buf.stat[y][x].st_mtime) + 4,
+			T_MAJ,
+			ctime(LEN_TIME) + 4,
 			struc->buf.buf[y][x], test_1);
 	free(tmp_perm);
 }

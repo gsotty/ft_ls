@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/14 14:02:19 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/29 10:21:48 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/29 15:54:20 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ static void	orber_files(int x, t_struc_ls *struc)
 		verif_2 = 0;
 		while (y < struc->buf.cont_files[x] - 1)
 		{
-			if (struc->buf.stat[x][y].st_mtime <
-					struc->buf.stat[x][y + 1].st_mtime)
+			if (ORD_1 < ORD_21)
 			{
 				swap_orber(x, y, struc);
 				verif_2 = 1;
@@ -74,13 +73,11 @@ static int	diff_order(int x, int verif, char **save_name, t_struc_ls *struc)
 
 	if ((lstat(save_name[x], &stat_tmp)) == -1)
 		return (-1);
-	if ((lstat(save_name[x + 2], &stat_tmp_2)) == -1)
+	if ((lstat(save_name[x + 1], &stat_tmp_2)) == -1)
 		return (-1);
-	if (stat_tmp.st_mtime < stat_tmp_2.st_mtime &&
-			struc->buf.files_or_dir[x] == 0)
+	if (ORD < ORD_2 && struc->buf.files_or_dir[x] == 0)
 		verif = verif_order(x, save_name, struc);
-	else if (stat_tmp.st_mtime < stat_tmp_2.st_mtime &&
-			struc->buf.files_or_dir[x] == 1 &&
+	else if (ORD < ORD_2 && struc->buf.files_or_dir[x] == 1 &&
 			struc->buf.files_or_dir[x + 1] == 1)
 		verif = verif_order(x, save_name, struc);
 	else if (struc->buf.files_or_dir[x] == 0 &&
