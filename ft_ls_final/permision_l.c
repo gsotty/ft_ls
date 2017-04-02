@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/26 14:18:34 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/23 13:00:09 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/04/02 16:45:55 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ static char	*permision_l_3(struct stat *buf, char *tmp, int xattr)
 		tmp[8] = 'w';
 	else
 		tmp[8] = '-';
-	if (((buf->st_mode & S_IROTH) != S_IROTH) &&
-			((buf->st_mode & S_IWOTH) != S_IWOTH) &&
+	if (((buf->st_mode & S_IXOTH) != S_IXOTH) &&
 			((buf->st_mode & S_ISVTX) == S_ISVTX))
 		tmp[9] = 'T';
 	else if ((buf->st_mode & S_ISVTX) == S_ISVTX)
@@ -50,8 +49,7 @@ static char	*permision_l_2(struct stat *buf, char *tmp, int xattr)
 		tmp[5] = 'w';
 	else
 		tmp[5] = '-';
-	if (((buf->st_mode & S_IRGRP) != S_IRGRP) &&
-			((buf->st_mode & S_IWGRP) != S_IWGRP) &&
+	if (((buf->st_mode & S_IXGRP) != S_IXGRP) &&
 			((buf->st_mode & S_ISGID) == S_ISGID))
 		tmp[6] = 'S';
 	else if ((buf->st_mode & S_ISGID) == S_ISGID)
@@ -74,8 +72,7 @@ static char	*permision_l_1(struct stat *buf, char *tmp, int xattr)
 		tmp[2] = 'w';
 	else
 		tmp[2] = '-';
-	if (((buf->st_mode & S_IWUSR) != S_IWUSR) &&
-			((buf->st_mode & S_IRUSR) != S_IRUSR) &&
+	if (((buf->st_mode & S_IXUSR) != S_IXUSR) &&
 			((buf->st_mode & S_ISUID) == S_ISUID))
 		tmp[3] = 'S';
 	else if ((buf->st_mode & S_ISUID) == S_ISUID)
