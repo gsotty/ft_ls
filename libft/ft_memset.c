@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 12:01:30 by gsotty            #+#    #+#             */
-/*   Updated: 2016/11/10 12:02:14 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/15 15:47:46 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	*ft_memset(void *s, int c, size_t n)
 {
-	unsigned int	x;
+	size_t			x;
 	unsigned char	*tab;
 
 	tab = (unsigned char *)s;

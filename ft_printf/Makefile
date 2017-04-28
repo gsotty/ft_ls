@@ -6,7 +6,7 @@
 #    By: gsotty <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/03 15:44:40 by gsotty            #+#    #+#              #
-#    Updated: 2017/02/22 09:39:43 by gsotty           ###   ########.fr        #
+#    Updated: 2017/03/22 15:08:50 by gsotty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,18 +32,18 @@ SRC = check_flag.c check_lenght.c check_precision.c check_specifier.c \
 	  ft_uintmax_t_itoa_base_m.c ft_unsigned_char_itoa_base.c \
 	  modif_longeur_x.c modif_longeur_xm.c modif_longeur_d_and_i.c \
 	  modif_longeur_dm.c ft_verif_char.c write_no_specifier.c ft_flag.c \
-	  modif_longeur_o.c modif_longeur_om.c
+	  modif_longeur_o.c modif_longeur_om.c ft_sprintf.c
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar rc $(NAME) $(OBJ)
+	@ar rc $(NAME) $(OBJ)
 	ranlib $(NAME)
 
 %.o : %.c
-	$(CC) $(FLAG) -g -c $< -I.
+	$(CC) $(FLAG) -g -c $<
 
 clean:
 	rm -Rf $(OBJ)

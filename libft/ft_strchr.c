@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 16:21:49 by gsotty            #+#    #+#             */
-/*   Updated: 2016/11/11 15:45:55 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/13 15:29:58 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 char	*ft_strchr(const char *s, int c)
 {
 	size_t	x;
+	size_t	len;
 
 	x = 0;
-	while (x <= ft_strlen(s))
+	len = ft_strlen(s);
+	while (x <= len)
 	{
 		if (s[x] == c)
 		{

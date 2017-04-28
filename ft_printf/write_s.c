@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 15:38:22 by gsotty            #+#    #+#             */
-/*   Updated: 2017/03/09 14:00:24 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/09 14:31:34 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ static char	*conv_char(va_list ap, t_len *len)
 	char	*tmp_va;
 	int		len_tmp_va;
 
-	len_tmp_va = 0;
 	tmp_va = va_arg(ap, char *);
 	if (tmp_va == NULL)
 	{
@@ -82,7 +81,6 @@ static char	*conv_char(va_list ap, t_len *len)
 		len_tmp_va = ft_strlen(tmp_va);
 		tmp = ft_memalloc(len_tmp_va);
 		ft_memcpy(tmp, tmp_va, len_tmp_va);
-		tmp[len_tmp_va] = '\0';
 		len->len_tmp = len_tmp_va;
 	}
 	return (tmp);

@@ -6,7 +6,7 @@
 /*   By: gsotty <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/20 10:40:26 by gsotty            #+#    #+#             */
-/*   Updated: 2017/02/28 10:40:57 by gsotty           ###   ########.fr       */
+/*   Updated: 2017/03/06 14:49:58 by gsotty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct		s_len
 }					t_len;
 
 int					ft_printf(const char *str, ...);
+int					ft_sprintf(char *buf, const char *str, ...);
 char				*write_buf(t_struc *struc, char *buf, t_len *len,
 		va_list ap);
 int					ft_verif_char(int c);
